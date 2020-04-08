@@ -12,8 +12,9 @@ import Role from "../role/Role";
 import Bar from "../charts/Bar";
 import Line from "../charts/Line";
 import Pie from "../charts/Pie";
+import Header from "../../components/header/Header";
 
-const {Header, Footer, Sider, Content} = Layout;
+const { Footer, Sider, Content} = Layout;
 
 export default class Admin extends Component {
     // 如果人为在地址栏输入 /admin ，是不会跳转到 admin 组件的
@@ -32,7 +33,7 @@ export default class Admin extends Component {
                     <LeftNav/>
                 </Sider>
                 <Layout>
-                    <Header>Header</Header>
+                   <Header />
                     <Content>
                         <Switch>
                             <Route path='/admin/home' component={Home}/>

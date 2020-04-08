@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {Menu} from 'antd';
-
-
 import menusConfig from '../../config/menusConfig'
 import {NavLink, withRouter} from "react-router-dom";
 
