@@ -28,6 +28,10 @@ class Header extends Component {
         this.getTitle()
     }
 
+    componentWillUnmount() {    // Header组件即将销毁时清除定时器
+        clearInterval(this.timer)
+    }
+
     getTitle = () => {      // 获取 header组件的标题
 
         const {pathname} = this.props.location
@@ -54,7 +58,7 @@ class Header extends Component {
     }
 
     getCurrentTime = () => {
-        setInterval(() => {
+        this.timer = setInterval(() => {
             this.setState({currentTime: new Date().toLocaleString()})
         }, 1000)
     }
