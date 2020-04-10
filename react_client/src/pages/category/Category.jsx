@@ -17,13 +17,14 @@ class Category extends Component {
         this.setState({visible: true})
     }
 
-    getValues(values){
-        console.log(values)
+    onFinish = (values)=>{
+       console.log(values)
     }
 
     handleOk = () => {   // 需要得到添加分类的数据
 
-        this.getValues()
+        // console.log(this.form)
+        this.form.submit()
 
         this.setState({
             visible: false,
@@ -31,7 +32,7 @@ class Category extends Component {
     };
 
     handleCancel = () => {
-        // console.log("cancel");
+        console.log("cancel");
         this.setState({
             visible: false,
         });
@@ -55,7 +56,10 @@ class Category extends Component {
                         onOk={this.handleOk}
                         onCancel={this.handleCancel}
                     >
-                        <AddCategory getValues={this.getValues} />
+                        <AddCategory
+                            setForm={(form)=>this.form=form}
+                            onfinish={this.onFinish}
+                        />
                     </Modal>
                 </Card>
             </div>
