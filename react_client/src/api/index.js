@@ -1,11 +1,11 @@
 import axios from 'axios'
 import jsonp from 'jsonp'
-// 设置 axios 响应数据的统一格式
-axios.interceptors.response.use(res=>res.data)
+
+import ajax from './ajax'
 
 // 暴露请求登录接口的函数
-export const reqLogin = (userInfo)=>axios.post('/login',userInfo)
-
+// export const reqLogin = (userInfo)=>axios.post('/login',userInfo)
+export const reqLogin = (userInfo)=>ajax('/login',userInfo,'post')
 
 /*
 *      合法的城市   status:"success"
@@ -27,5 +27,19 @@ export const reqWeather = (city) =>{
         })
     })
 }
+
+// 暴露请求添加分类信息的接口函数
+// export const reqAddCategory = (categoryInfo) => axios.post('/category/add',categoryInfo)
+export const reqAddCategory = (categoryInfo) => ajax('/category/add',categoryInfo,'post')
+
+// 暴露请求所有分类信息的接口函数，如果 parentId为'0'，表示获取所有一级分类，如果不是'0'，表示获取所有二级分类
+// export const reqgetCategorys = (parentId)=>axios.get('/category/list',{
+//     params:{
+//         parentId
+//     }
+// })
+
+export const reqgetCategorys = (parentId)=>ajax('/category/list',{parentId})
+
 
 

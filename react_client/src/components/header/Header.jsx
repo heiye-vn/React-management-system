@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom'
 import './Header.less'
 import storageUrils from '../../utils/storageUtils'
-import {Modal, Button} from 'antd';
+import {Modal} from 'antd';
 import {ExclamationCircleOutlined} from '@ant-design/icons';
 import {reqWeather} from '../../api/index'
 import menusConfig from '../../config/menusConfig'
+import MyButton from "../my-button/MyButton";
 
 const {confirm} = Modal;
 
@@ -91,7 +92,7 @@ class Header extends Component {
             <div className='header'>
                 <div className='header-top'>
                     <span>欢迎，<span style={{fontWeight:"bold",color:"red"}}>{this.user.username}</span></span>
-                    <Button onClick={this.loginOut}>退出</Button>
+                    <MyButton onClick={this.loginOut}>退出</MyButton>
                 </div>
                 <div className='header-bottom'>
                     <span className='header-bottom-left'>{this.getTitle()}</span>
