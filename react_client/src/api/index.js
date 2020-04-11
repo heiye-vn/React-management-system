@@ -1,4 +1,3 @@
-import axios from 'axios'
 import jsonp from 'jsonp'
 
 import ajax from './ajax'
@@ -39,7 +38,10 @@ export const reqAddCategory = (categoryInfo) => ajax('/category/add',categoryInf
 //     }
 // })
 
-export const reqgetCategorys = (parentId)=>ajax('/category/list',{parentId})
+export const reqGetCategorys = (parentId)=>ajax('/category/list',{parentId})
+
+// 暴露请求修改分类信息的接口函数
+export const reqUpdateCategory = categoryInfo=>ajax('/category/update',categoryInfo,'post')
 
 
 
