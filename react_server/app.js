@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 
 const app = new Koa();
 const router = new Router();
-const {AddCategory,getCategorys} = require('./controller/category')
+const {AddCategory,getCategorys,updateCategory} = require('./controller/category')
 
 // 引入用户的模型
 const Users = require('./schema/userSchema')
@@ -50,7 +50,11 @@ router.post('/login', async cxt => {
 // 添加分类的逻辑
 router.post('/category/add',AddCategory)
 
+// 获取分类的逻辑
 router.get('/category/list',getCategorys)
+
+// 修改分类的逻辑
+router.post('/category/update',updateCategory)
 
 // 连接 27017 端口下的 project 数据库（名字可以自定义）
 mongoose.connect('mongodb://localhost:27017/project', {

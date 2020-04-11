@@ -1,6 +1,6 @@
 const Categorys =  require('../schema/categorySchema')      // 引入分类模型
 
-// 添加分类
+// 添加分类（添加一级分类时会把 '0' 作为parentId存到数据库，添加二级分类时会把当前一级分类的_id作为parentId存到数据库中）
 exports.AddCategory =  async cxt=>{
     // console.log(cxt.request.body)
     const {parentId,categoryName} = cxt.request.body
@@ -41,6 +41,26 @@ exports.getCategorys =  async cxt=>{
             status:1,
             msg:'获取分类失败'
             
+        }
+    }
+}
+
+
+//修改分类
+exports.updateCategory = async cxt => {
+    // console.log(cxt.request.body)
+    const { categoryName ,_id} = cxt.request.body
+    const result = await Categorys.findById({_id})
+    if (result.name===categoryName) { //如果前端传递的分类名 和查询到的分类名重复 
+        cxt.body = {
+            status: 1,
+            msg: '分类已存在，不可修改'
+        }
+    } else {      //如果分类没有重复  那就修改该分类
+        await Categorys.updateOne(result,{$set:{name:categoryName}})
+        cxt.body = {
+            status: 0,
+            msg: '修改分类成功',
         }
     }
 }
