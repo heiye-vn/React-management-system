@@ -190,7 +190,7 @@ export default class Category extends Component {
         const extra = (
             <Button type='primary' onClick={this.showAdd}>
                 <PlusOutlined/>
-                <span>添加按钮</span>
+                <span>添加分类</span>
             </Button>
         )
         return (
