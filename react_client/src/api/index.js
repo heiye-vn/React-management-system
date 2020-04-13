@@ -43,5 +43,7 @@ export const reqGetCategorys = (parentId)=>ajax('/category/list',{parentId})
 // 暴露请求修改分类信息的接口函数
 export const reqUpdateCategory = categoryInfo=>ajax('/category/update',categoryInfo,'post')
 
+// 暴露请求删除后台图片的接口函数
+export const reqDelteImg = (name)=>ajax('/img/delete',{name},'post')
 
 
