@@ -5,7 +5,7 @@ exports.AddCategory =  async cxt=>{
     // console.log(cxt.request.body)
     const {parentId,categoryName} = cxt.request.body
     const result = await Categorys.findOne({name:categoryName})
-    console.log(result)
+    // console.log(result)
     if(result){     // 如果找到了，就提示分类名称重复
         cxt.body = {
             status:1,

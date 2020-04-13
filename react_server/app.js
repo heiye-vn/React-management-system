@@ -3,10 +3,20 @@ const Router = new require('koa-router');
 const static = require('koa-static');
 const bodyParser = require('koa-bodyparser');
 const mongoose = require('mongoose')
+const multer = require('koa-multer')
+const path = require('path')
 
 const app = new Koa();
 const router = new Router();
-const {AddCategory,getCategorys,updateCategory} = require('./controller/category')
+const {
+    AddCategory,
+    getCategorys,
+    updateCategory
+} = require('./controller/category')
+const {
+    uploadImg,
+    deleteImg
+} = require('./controller/product')
 
 // 引入用户的模型
 const Users = require('./schema/userSchema')
@@ -14,6 +24,26 @@ const Users = require('./schema/userSchema')
 app.use(bodyParser()); // 注：该方法必须写在 app.use(router.routes()) 前面，否则就获取不到数据
 app.use(static('./public'));
 app.use(router.routes());
+
+//文件上传
+//配置
+var storage = multer.diskStorage({
+    //文件保存在后台的路径
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
+    },
+    //修改文件名称
+    filename: function (req, file, cb) {
+        // console.log(file)
+        const extname = path.extname(file.originalname)     // 获取图片的后缀名
+        // console.log(extname)
+        cb(null, Date.now() + extname);
+    }
+})
+//加载配置
+var upload = multer({
+    storage: storage
+});
 
 
 router.post('/login', async cxt => {
@@ -47,14 +77,15 @@ router.post('/login', async cxt => {
 
 })
 
-// 添加分类的逻辑
-router.post('/category/add',AddCategory)
+// 商品分类的路由处理逻辑
+router.post('/category/add', AddCategory)
+router.get('/category/list', getCategorys)
+router.post('/category/update', updateCategory)
 
-// 获取分类的逻辑
-router.get('/category/list',getCategorys)
-
-// 修改分类的逻辑
-router.post('/category/update',updateCategory)
+// 商品的路由处理逻辑 
+// 专门接收前端上传图片的name是 image 的图片
+router.post('/img/upload',upload.single('image'), uploadImg)
+router.post('/img/delete',deleteImg)
 
 // 连接 27017 端口下的 project 数据库（名字可以自定义）
 mongoose.connect('mongodb://localhost:27017/project', {
@@ -62,8 +93,8 @@ mongoose.connect('mongodb://localhost:27017/project', {
     useUnifiedTopology: true
 }).then(() => {
     console.log('27017/project数据库连接成功')
-    app.listen(6000, () => {
-        console.log('6000端口成功运行')
+    app.listen(5000, () => {
+        console.log('5000端口成功运行')
     })
 }).catch(() => {
     console.log('27017/project数据库连接失败')
