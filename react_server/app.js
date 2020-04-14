@@ -15,7 +15,8 @@ const {
 } = require('./controller/category')
 const {
     uploadImg,
-    deleteImg
+    deleteImg,
+    addProduct
 } = require('./controller/product')
 
 // 引入用户的模型
@@ -77,15 +78,19 @@ router.post('/login', async cxt => {
 
 })
 
-// 商品分类的路由处理逻辑
+// 分类的路由处理逻辑
 router.post('/category/add', AddCategory)
 router.get('/category/list', getCategorys)
 router.post('/category/update', updateCategory)
 
 // 商品的路由处理逻辑 
-// 专门接收前端上传图片的name是 image 的图片
-router.post('/img/upload',upload.single('image'), uploadImg)
+router.post('/img/upload',upload.single('image'), uploadImg)    // 专门接收前端上传图片的name是 image 的图片
 router.post('/img/delete',deleteImg)
+router.post('/product/add',addProduct)
+
+
+
+
 
 // 连接 27017 端口下的 project 数据库（名字可以自定义）
 mongoose.connect('mongodb://localhost:27017/project', {
