@@ -64,3 +64,14 @@
 
 1. 添加Upload组件（图片上传）
 2. 后端结合前端进行图片处理（保存图片、删除图片）
+
+
+
+### day10
+
+1. 添加富文本编辑器组件（RichTextEditor）
+
+   ​	注：antd没有提供相应的富文本编辑器组件，需要在https://www.npmjs.com/package/react-draft-wysiwyg该npm网站中去下载相应插件。
+
+2. 完成商品添加的前后端逻辑（将商品添加至数据库）
+

@@ -11,6 +11,9 @@ class UploadPic extends Component {
         fileList: [],               // upload组件上传的图片
     };
 
+    // 根据fileList生成图片名字组成的数组
+   getImgs = () => this.state.fileList.map(item=>item.name)
+
     handleCancel = () => {
         console.log('关闭了图片预览')
         this.setState({previewVisible: false})
@@ -65,10 +68,14 @@ class UploadPic extends Component {
                     listType="picture-card"     // 图片列表的样式
                     fileList={fileList}
                     name={'image'}
+                    accept={'image/*'}             // 接收上传文件的类型（表示接收所有类型的图片）
                     onPreview={this.handlePreview}
                     onChange={this.handleChange}
                 >
-                    {fileList.length >= 8 ? null : uploadButton}
+                    {
+                        // 控制上传图片的数量
+                        fileList.length >= 3 ? null : uploadButton
+                    }
                 </Upload>
                 <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                     <img alt="example" style={{width: '100%'}} src={previewImage}/>

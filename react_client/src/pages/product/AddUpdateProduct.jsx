@@ -1,23 +1,27 @@
 import React, {Component} from 'react';
-import {Card, Form, Input, Cascader, Button} from 'antd'
+import {Card, Form, Input, Cascader, Button, message} from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons';
 
 import MyButton from "../../components/my-button/MyButton";
-import {reqGetCategorys} from '../../api/index'
+import {reqGetCategorys, reqAddProduct} from '../../api/index'
 import UploadPic from "./UploadPic";
+import RichTextEditor from "./RichTextEditor";
 
 const {TextArea} = Input;
 
 class AddUpdateProduct extends Component {
 
+    constructor(props) {
+        super(props);
+        this.imgs = React.createRef()       // 创建标记对象
+        this.details = React.createRef()
+    }
+
     state = {
         options: [],      // 存放所有分类选项
     };
 
-    formRef = React.createRef()
-
     componentDidMount() {
-        // const form = this.formRef.current
         this.getCategorys()
     }
 
@@ -25,12 +29,6 @@ class AddUpdateProduct extends Component {
         const result = await reqGetCategorys('0')
         const {status, data} = result
         // console.log(data);
-
-        // const options = data.map(item => ({
-        //     value: item._id,
-        //     lable: item.name,
-        //     isLeaf: false,
-        // }))
 
         const options = this.formatoData(data, true)
 
@@ -73,8 +71,33 @@ class AddUpdateProduct extends Component {
     }
 
     // 收集表单数据
-    onFinish = (values)=>{
-        console.log(values)
+    onFinish = async (values) => {
+        // 父组件如何调用子组件的方法
+        const imgs = this.imgs.current.getImgs()
+        const details = this.details.current.getDetails()
+        console.log(values, imgs, details)
+
+        const {name, desc, price, category} = values
+        let pCategoryId, categoryId
+        if (category.length === 1) {        // 如果收集的是长度为1的数组
+            pCategoryId = '0'
+            categoryId = category[0]
+        } else {
+            pCategoryId = category[0]
+            categoryId = category[1]
+        }
+
+        const porductInfo = {name, desc, price, pCategoryId, categoryId, imgs, details}
+        const result = await reqAddProduct(porductInfo)
+        console.log(result);
+        const {status,msg} = result
+            if(status === 0){   // 如果添加商品成功，则提示成功，并且跳转到 /admin/product 页面
+                message.success(msg)
+                this.props.history.push('/admin/product')
+            }else{
+                message.error(msg)
+            }
+
     }
 
     render() {
@@ -89,22 +112,21 @@ class AddUpdateProduct extends Component {
 
         const formItemLayout = {
             labelCol: {             // 文字占据的比例（一共为24份）
-                sm: {span: 5,},
+                sm: {span: 6,},
             },
             wrapperCol: {           // 标签组件占据的比例（一共为24份）
-                sm: {span: 8,},
+                sm: {span: 12,},
             },
         };
 
         return (
             <Card title={title}>
                 <Form
-                    ref={this.formRef}
                     {...formItemLayout}
                     onFinish={this.onFinish}>
                     <Form.Item
                         label="商品名称"
-                        name='productName'
+                        name='name'
                         rules={[
                             {required: true, message: "商品名称不能为空"}
                         ]}
@@ -113,7 +135,7 @@ class AddUpdateProduct extends Component {
                     </Form.Item>
                     <Form.Item
                         label="商品描述"
-                        name='productDescription'
+                        name='desc'
                         rules={[
                             {required: true, message: "商品描述不能为空"}
                         ]}
@@ -122,7 +144,7 @@ class AddUpdateProduct extends Component {
                     </Form.Item>
                     <Form.Item
                         label="商品价格"
-                        name='productPrice'
+                        name='price'
                         rules={[
                             {required: true, message: "商品价格不能为空"}
                         ]}
@@ -131,7 +153,7 @@ class AddUpdateProduct extends Component {
                     </Form.Item>
                     <Form.Item
                         label="商品分类"
-                        name='productCategory'
+                        name='category'
                         rules={[
                             {required: true, message: "商品分类不能为空"}
                         ]}
@@ -144,14 +166,11 @@ class AddUpdateProduct extends Component {
                             changeOnSelect
                         />
                     </Form.Item>
-                    <Form.Item
-                        label="商品图片"
-                        name='productImg'
-                        rules={[
-                            {required: true, message: "商品分类不能为空"}
-                        ]}
-                    >
-                    <UploadPic />
+                    <Form.Item label="商品图片">
+                        <UploadPic ref={this.imgs}/>
+                    </Form.Item>
+                    <Form.Item label="商品详细描述">
+                        <RichTextEditor ref={this.details}/>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">

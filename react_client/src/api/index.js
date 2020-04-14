@@ -46,4 +46,5 @@ export const reqUpdateCategory = categoryInfo=>ajax('/category/update',categoryI
 // 暴露请求删除后台图片的接口函数
 export const reqDelteImg = (name)=>ajax('/img/delete',{name},'post')
 
-
+// 暴露请求添加商品的接口函数
+export const reqAddProduct = (productInfo)=>ajax('/product/add',{productInfo},'post')
