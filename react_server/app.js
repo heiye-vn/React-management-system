@@ -16,7 +16,8 @@ const {
 const {
     uploadImg,
     deleteImg,
-    addProduct
+    addProduct,
+    getProducts
 } = require('./controller/product')
 
 // 引入用户的模型
@@ -87,6 +88,7 @@ router.post('/category/update', updateCategory)
 router.post('/img/upload',upload.single('image'), uploadImg)    // 专门接收前端上传图片的name是 image 的图片
 router.post('/img/delete',deleteImg)
 router.post('/product/add',addProduct)
+router.get('/product/list',getProducts)
 
 
 
