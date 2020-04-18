@@ -100,13 +100,33 @@ class AddUpdateProduct extends Component {
 
     }
 
+    UNSAFE_componentWillMount() {
+        if(this.props.location.state){  // 如果有值，就是修改页面
+            this.update = true
+            this.product = this.props.location.state.product
+        } else{
+            this.update = false
+            this.product = {}
+        }
+    }
+
     render() {
+        // console.log(this.product)
+
+        const {categoryId,desc,details,imgs,name,pCategoryId,price} = this.product
+        let category = []
+        if(pCategoryId==='0'){
+            category.push(categoryId)
+        }else{
+            category.push(pCategoryId,categoryId)
+        }
+        console.log(category)
         const title = (
             <span>
                 <MyButton onClick={this.props.history.goBack}>
                     <ArrowLeftOutlined/>
                 </MyButton>
-                <span>添加商品页面</span>
+                <span>{this.update?'修改商品页面':'添加商品页面'}</span>
             </span>
         )
 
@@ -123,6 +143,9 @@ class AddUpdateProduct extends Component {
             <Card title={title}>
                 <Form
                     {...formItemLayout}
+                    initialValues={{
+                        name,desc,price,category,imgs,details
+                    }}
                     onFinish={this.onFinish}>
                     <Form.Item
                         label="商品名称"

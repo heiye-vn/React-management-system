@@ -51,3 +51,13 @@ export const reqAddProduct = (productInfo)=>ajax('/product/add',productInfo,'pos
 
 // 暴露请求获取指定页码数和指定商品数据量的接口函数
 export const reqProducts = (page,num)=>ajax('/product/list',{page,num})
+
+// 暴露请求根据搜索关键词以及不同的搜索类型搜索商品 的接口函数
+export const reqSearchProducts = (page,num,keywords,searchType)=>ajax('/product/search',{
+    page,
+    num,
+    // searchType,
+    // keywords,
+    [searchType]:keywords
+
+})
