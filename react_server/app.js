@@ -17,7 +17,8 @@ const {
     uploadImg,
     deleteImg,
     addProduct,
-    getProducts
+    getProducts,
+    searchProducts
 } = require('./controller/product')
 
 // 引入用户的模型
@@ -89,6 +90,7 @@ router.post('/img/upload',upload.single('image'), uploadImg)    // 专门接收�
 router.post('/img/delete',deleteImg)
 router.post('/product/add',addProduct)
 router.get('/product/list',getProducts)
+router.get('/product/search',searchProducts)
 
 
 
