@@ -3,7 +3,7 @@ import {Card, Form, Input, Cascader, Button, message} from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons';
 
 import MyButton from "../../components/my-button/MyButton";
-import {reqGetCategorys, reqAddProduct} from '../../api/index'
+import {reqGetCategorys, reqAddProduct, reqUpdateProduct} from '../../api/index'
 import UploadPic from "./UploadPic";
 import RichTextEditor from "./RichTextEditor";
 
@@ -29,11 +29,32 @@ class AddUpdateProduct extends Component {
         const result = await reqGetCategorys('0')
         const {status, data} = result
         // console.log(data);
-
+        const {pCategoryId} = this.product
         const options = this.formatoData(data, true)
 
         if (status === 0) { //如果获取分类成功
-            this.setState({options})
+            // 如果是修改页面，并且分类的长度为2
+            if (this.update && pCategoryId !== '0') {
+                const targetOption = options.find(item => item.value === pCategoryId)
+                // console.log(targetOption);
+                const index = options.findIndex(item => item.value === targetOption.value)
+                // console.log(index)
+                const result = await reqGetCategorys(targetOption.value)
+                let {status, data} = result
+                if (status === 0) {
+                    targetOption.children = this.formatoData(data, false)
+                } else {
+                    targetOption.isLeaf = true
+                }
+
+                // console.log(targetOption)
+                options[index] = targetOption
+
+                // 更新数据
+                this.setState({options})
+            } else {
+                this.setState({options})
+            }
         }
     }
 
@@ -72,6 +93,7 @@ class AddUpdateProduct extends Component {
 
     // 收集表单数据
     onFinish = async (values) => {
+        // console.log(values)
         // 父组件如何调用子组件的方法
         const imgs = this.imgs.current.getImgs()
         const details = this.details.current.getDetails()
@@ -88,23 +110,30 @@ class AddUpdateProduct extends Component {
         }
 
         const porductInfo = {name, desc, price, pCategoryId, categoryId, imgs, details}
-        const result = await reqAddProduct(porductInfo)
+        let result = null;
+        if(this.update){        // 如果是修改页面，就执行修改商品的接口函数
+            porductInfo._id = this.product._id
+            result = await reqUpdateProduct(porductInfo)
+        }else{                  // 如果是添加页面，就执行添加商品的接口函数
+            result = await reqAddProduct(porductInfo)
+        }
+
         console.log(result);
-        const {status,msg} = result
-            if(status === 0){   // 如果添加商品成功，则提示成功，并且跳转到 /admin/product 页面
-                message.success(msg)
-                this.props.history.push('/admin/product')
-            }else{
-                message.error(msg)
-            }
+        const {status, msg} = result
+        if (status === 0) {   // 如果添加商品成功，则提示成功，并且跳转到 /admin/product 页面
+            message.success(msg)
+            this.props.history.push('/admin/product')
+        } else {
+            message.error(msg)
+        }
 
     }
 
     UNSAFE_componentWillMount() {
-        if(this.props.location.state){  // 如果有值，就是修改页面
+        if (this.props.location.state) {  // 如果有值，就是修改页面
             this.update = true
             this.product = this.props.location.state.product
-        } else{
+        } else {
             this.update = false
             this.product = {}
         }
@@ -112,21 +141,22 @@ class AddUpdateProduct extends Component {
 
     render() {
         // console.log(this.product)
-
-        const {categoryId,desc,details,imgs,name,pCategoryId,price} = this.product
+        const {categoryId, desc, details, imgs, name, pCategoryId, price} = this.product
         let category = []
-        if(pCategoryId==='0'){
+        if (pCategoryId === '0') {
             category.push(categoryId)
-        }else{
-            category.push(pCategoryId,categoryId)
+        } else {
+            category.push(pCategoryId, categoryId)
         }
-        console.log(category)
+        // console.log(category)
+        // console.log(imgs)
+        // console.log(details)
         const title = (
             <span>
                 <MyButton onClick={this.props.history.goBack}>
                     <ArrowLeftOutlined/>
                 </MyButton>
-                <span>{this.update?'修改商品页面':'添加商品页面'}</span>
+                <span>{this.update ? '修改商品' : '添加商品'}</span>
             </span>
         )
 
@@ -144,7 +174,7 @@ class AddUpdateProduct extends Component {
                 <Form
                     {...formItemLayout}
                     initialValues={{
-                        name,desc,price,category,imgs,details
+                        name, desc, price, category
                     }}
                     onFinish={this.onFinish}>
                     <Form.Item
@@ -190,10 +220,10 @@ class AddUpdateProduct extends Component {
                         />
                     </Form.Item>
                     <Form.Item label="商品图片">
-                        <UploadPic ref={this.imgs}/>
+                        <UploadPic ref={this.imgs} imgs={imgs}/>
                     </Form.Item>
                     <Form.Item label="商品详细描述">
-                        <RichTextEditor ref={this.details}/>
+                        <RichTextEditor ref={this.details} details={details}/>
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">

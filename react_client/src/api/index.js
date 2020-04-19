@@ -59,5 +59,10 @@ export const reqSearchProducts = (page,num,keywords,searchType)=>ajax('/product/
     // searchType,
     // keywords,
     [searchType]:keywords
-
 })
+
+// 暴露请求 修改商品 的接口函数
+export const reqUpdateProduct = (productInfo)=>ajax('/product/update',productInfo,'post')
+
+// 暴露请求 根据分类的id查找分类信息的接口函数
+export const reqCategoryInfo = (categoryId)=>ajax('/category/info',{categoryId})

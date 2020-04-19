@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Card, Select, Input, Button, Table} from 'antd'
 import {PlusOutlined} from '@ant-design/icons';
-import {reqProducts,reqSearchProducts} from "../../api";
+import {reqProducts, reqSearchProducts} from "../../api";
 import MyButton from "../../components/my-button/MyButton";
 import {PAGE_NUMBER} from '../../utils/constans'
 
@@ -11,9 +11,9 @@ class ShowProducts extends Component {
 
     state = {
         products: [],           // 存放所有商品列表
-        total:0,                // 商品的总数
-        keywords:'',            // 搜索的关键词
-        searchType:'name',      // 存储搜索类型，默认是按商品名称搜索
+        total: 0,                // 商品的总数
+        keywords: '',            // 搜索的关键词
+        searchType: 'name',      // 存储搜索类型，默认是按商品名称搜索
     }
 
     //初始化每列的信息
@@ -39,10 +39,13 @@ class ShowProducts extends Component {
                     // console.log(product);//render函数的参数 是对应行的数据源
                     return (
                         <span>
-                            <MyButton>详情</MyButton>
                             <MyButton onClick={()=>this.props.history.push({
-                                pathname:'/admin/product/addUpdate',
+                                pathname:'/admin/product/detail',
                                 state:{product}
+                            })}>详情</MyButton>
+                            <MyButton onClick={() => this.props.history.push({
+                                pathname: '/admin/product/addUpdate',
+                                state: {product}
                             })}>修改</MyButton>
                         </span>
                     )
@@ -62,18 +65,18 @@ class ShowProducts extends Component {
     // 根据页码获取对应的分页数据
     getProducts = async (page) => {     // 获取商品数据
 
-        const {keywords,searchType} = this.state
+        const {keywords, searchType} = this.state
         let result = null;
-        if(keywords){
-            result = await reqSearchProducts(page,PAGE_NUMBER,keywords,searchType)
-        }else{
+        if (keywords) {
+            result = await reqSearchProducts(page, PAGE_NUMBER, keywords, searchType)
+        } else {
             result = await reqProducts(page, PAGE_NUMBER)
         }
         // const result = await reqProducts(page, PAGE_NUMBER)
         // console.log(result)
-        const {status,data} = result
+        const {status, data} = result
         if (status === 0) {
-            const {result,total} = data
+            const {result, total} = data
             this.setState({
                 products: result,
                 total
@@ -82,16 +85,16 @@ class ShowProducts extends Component {
     }
 
     render() {
-        const {products,total,keywords,searchType} = this.state
+        const {products, total, keywords, searchType} = this.state
         // console.log(total)
         const title = (
             <span>
                 <Select
                     value={searchType}
                     style={{width: 200}}
-                    onChange={(value)=>{
+                    onChange={(value) => {
                         // console.log(value)
-                        this.setState({searchType:value})
+                        this.setState({searchType: value})
                     }}
                 >
                     <Option value='name'>按名称搜索</Option>
@@ -101,9 +104,9 @@ class ShowProducts extends Component {
                     placeholder={'请输入搜索关键词'}
                     style={{width: 200, margin: 10}}
                     value={keywords}
-                    onChange={(e)=>this.setState({keywords:e.target.value})}
+                    onChange={(e) => this.setState({keywords: e.target.value})}
                 />
-                <Button type={'primary'} onClick={()=>this.getProducts(1)}>搜索</Button>
+                <Button type={'primary'} onClick={() => this.getProducts(1)}>搜索</Button>
             </span>
         )
         const extra = (
