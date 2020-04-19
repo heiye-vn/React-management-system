@@ -45,7 +45,6 @@ exports.getCategorys =  async cxt=>{
     }
 }
 
-
 //修改分类
 exports.updateCategory = async cxt => {
     // console.log(cxt.request.body)
@@ -61,6 +60,21 @@ exports.updateCategory = async cxt => {
         cxt.body = {
             status: 0,
             msg: '修改分类成功',
+        }
+    }
+}
+
+// 根据id获取分类信息
+exports.getCategory = async cxt=>{
+    // console.log(cxt.query)
+    const {categoryId} = cxt.query
+    const result = await Categorys.findById({_id:categoryId})
+
+    if(result){         // 如果找到了该分类
+        cxt.body = {
+            status:0,
+            data:result,
+            msg:'查找分类信息成功'
         }
     }
 }

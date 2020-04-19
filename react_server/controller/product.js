@@ -150,3 +150,22 @@ exports.searchProducts = async cxt => {
         }
     }
 }
+
+// 修改商品
+exports.updateProduct = async cxt =>{
+    // console.log(cxt.request.body)
+    const {_id,name} = cxt.request.body
+    const result = await Products.findById({_id})
+    if (result.name===name) { //如果前端传递的商品名 和查询到的商品名重复 
+        cxt.body = {
+            status: 1,
+            msg: '商品已存在，不可修改'
+        }
+    } else {      //如果商品没有重复  那就修改该商品
+        await Products.updateOne(result,{$set:cxt.request.body})
+        cxt.body = {
+            status: 0,
+            msg: '修改商品成功',
+        }
+    }
+}

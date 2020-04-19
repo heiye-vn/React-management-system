@@ -11,14 +11,16 @@ const router = new Router();
 const {
     AddCategory,
     getCategorys,
-    updateCategory
+    updateCategory,
+    getCategory
 } = require('./controller/category')
 const {
     uploadImg,
     deleteImg,
     addProduct,
     getProducts,
-    searchProducts
+    searchProducts,
+    updateProduct
 } = require('./controller/product')
 
 // 引入用户的模型
@@ -84,6 +86,7 @@ router.post('/login', async cxt => {
 router.post('/category/add', AddCategory)
 router.get('/category/list', getCategorys)
 router.post('/category/update', updateCategory)
+router.get('/category/info', getCategory)
 
 // 商品的路由处理逻辑 
 router.post('/img/upload',upload.single('image'), uploadImg)    // 专门接收前端上传图片的name是 image 的图片
@@ -91,6 +94,7 @@ router.post('/img/delete',deleteImg)
 router.post('/product/add',addProduct)
 router.get('/product/list',getProducts)
 router.get('/product/search',searchProducts)
+router.post('/product/update',updateProduct)
 
 
 
