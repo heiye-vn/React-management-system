@@ -66,3 +66,9 @@ export const reqUpdateProduct = (productInfo)=>ajax('/product/update',productInf
 
 // 暴露请求 根据分类的id查找分类信息的接口函数
 export const reqCategoryInfo = (categoryId)=>ajax('/category/info',{categoryId})
+
+// 暴露请求 添加角色的接口函数
+export const reqAddRole = (roleInfo)=>ajax('/role/add',roleInfo,'post')
+
+// 暴露 请求所有角色集合的接口函数
+export const reqGetRoles = ()=>ajax('/role/list')

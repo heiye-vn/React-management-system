@@ -43,10 +43,9 @@ class Header extends Component {
                 title = item.title
             }
             if (item.children) {    // 如果存在子菜单，就在子菜单中找到 pathname 和 key 相等的项
-                const result = item.children.find(cItem => pathname === cItem.key)
-                if (result) {
-                    title = result.title
-                }
+                // 如果 pathname 包含 cItem.key，就返回cItem.key对应的对象
+                const result = item.children.find(cItem => pathname.includes(cItem.key))
+                if (result)  title = result.title
             }
         })
         return title

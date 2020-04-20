@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import MyButton from "../../components/my-button/MyButton";
 import {Card, List} from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons';
-import './detail.less'
+import './DetailProduct.less'
 import {BASE_URL} from "../../utils/constans";
 import {reqCategoryInfo} from '../../api'
 const {Item} = List
@@ -21,13 +21,20 @@ class DetailProduct extends Component {
         // const result1 = await reqCategoryInfo(pCategoryId)
         // const result2 = await reqCategoryInfo(categoryId)
 
-        const result = await Promise.all([reqCategoryInfo(pCategoryId),reqCategoryInfo(categoryId)])
-
-        this.setState({
-            name1:result[0].data.name,
-            name2:result[1].data.name,
-        })
-
+        // console.log(categoryId,pCategoryId)
+        // 如果是一级分类下的商品
+        if(pCategoryId==='0'){
+            const result = await  reqCategoryInfo(categoryId)
+            this.setState({
+                name1:result.data.name
+            })
+        }else{
+            const result = await Promise.all([reqCategoryInfo(pCategoryId),reqCategoryInfo(categoryId)])
+            this.setState({
+                name1:result[0].data.name,
+                name2:result[1].data.name,
+            })
+        }
     }
     render() {
         const title = (
@@ -69,7 +76,9 @@ class DetailProduct extends Component {
                     <Item>
                         <span className='left'>
                             商品分类：
-                            <span className='right'> {name1+'-->'+name2} </span>
+                            <span className='right'>
+                                {name2?name1+'-->'+name2:name1}
+                            </span>
                         </span>
                     </Item>
                     <Item>

@@ -47,6 +47,7 @@ class ShowProducts extends Component {
                                 pathname: '/admin/product/addUpdate',
                                 state: {product}
                             })}>修改</MyButton>
+                            <MyButton>删除</MyButton>
                         </span>
                     )
                 }

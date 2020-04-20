@@ -30,12 +30,12 @@ export default class Category extends Component {
                 // console.log(a);//render函数的参数 是对应行的数据源
                 return (
                     <span>
-                            <MyButton onClick={() => this.showUpdate(category)}>修改分类名</MyButton>
+                        <MyButton onClick={() => this.showUpdate(category)}>修改分类名</MyButton>
                         {
                             this.state.parentId === '0' ?
                                 <MyButton onClick={() => this.showSubCategory(category)}>查看子分类</MyButton> : null
                         }
-
+                        <MyButton>删除分类名</MyButton>
                         </span>
                 )
             }
@@ -82,7 +82,7 @@ export default class Category extends Component {
     }
 
     //点击修改分类页面的ok按钮
-    handleUpdateOk = () =>{
+    handleUpdateOk = () => {
         this.form.submit()
     }
     updateCategory = async (values) => {
