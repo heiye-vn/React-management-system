@@ -22,6 +22,10 @@ const {
     searchProducts,
     updateProduct
 } = require('./controller/product')
+const {
+    addRole,
+    getRoles
+} = require('./controller/role')
 
 // 引入用户的模型
 const Users = require('./schema/userSchema')
@@ -88,13 +92,19 @@ router.get('/category/list', getCategorys)
 router.post('/category/update', updateCategory)
 router.get('/category/info', getCategory)
 
-// 商品的路由处理逻辑 
+// 图片的路由处理逻辑
 router.post('/img/upload',upload.single('image'), uploadImg)    // 专门接收前端上传图片的name是 image 的图片
 router.post('/img/delete',deleteImg)
+
+// 商品的路由处理逻辑 
 router.post('/product/add',addProduct)
 router.get('/product/list',getProducts)
 router.get('/product/search',searchProducts)
 router.post('/product/update',updateProduct)
+
+// 角色的路由处理逻辑
+router.post('/role/add',addRole)
+router.get('/role/list',getRoles)
 
 
 
