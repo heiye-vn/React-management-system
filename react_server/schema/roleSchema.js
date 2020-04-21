@@ -8,8 +8,8 @@ function formate(date){
 const roleSchema = new mongoose.Schema({
     name:String,
     create_time:{           // 角色创建的初始时间
-        type:String,
-        // default:new Date()
+        type:Date,
+        default:Date.now    // 必须是函数的形式，不能是函数（new Date）
     },
     auth_name:String,       // 授权人
     auth_time:String,       // 授权时间

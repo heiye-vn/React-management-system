@@ -13,7 +13,7 @@ exports.addRole = async cxt => {
             msg: '该角色名称重复'
         }
     } else {      //如果没有找到该角色 就添加该角色
-        const role = await Roles.create({ name: roleName,create_time:new Date()})
+        const role = await Roles.create({ name: roleName})
         // console.log(role)
         cxt.body = {
             status: 0,
