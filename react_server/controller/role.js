@@ -44,3 +44,22 @@ exports.getRoles = async cxt => {
 
 }
 
+// 修改角色权限
+exports.updateRole = async cxt =>{
+    console.log(cxt.request.body)
+    const {menus,_id} = cxt.request.body
+    const result = await Roles.findById({_id})
+    if(result.menus.toString() === menus.toString()){     // 如果前端传的menus权限信息和数据库中的menus信息相等，就提示权限已经存在
+        cxt.body = {
+            status:1,
+            msg:'权限信息重复，请重新修改权限'
+        }
+    }else{      // 如果不相等，就修改权限信息
+       const role = await Roles.updateOne(result,{$set:cxt.request.body})
+        cxt.body = {
+            status:0,
+            msg:'修改权限成功',
+            data:role
+        }
+    }
+}
