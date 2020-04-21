@@ -3,6 +3,7 @@ import {Button, Card, Modal, Form, Input, message, Table} from "antd";
 import {PlusOutlined} from '@ant-design/icons';
 import {reqAddRole, reqGetRoles, reqUpdateRole} from "../../api";
 import UpdateRole from "./UpdateRole";
+import storageUtils from "../../utils/storageUtils";
 
 export default class Role extends Component {
 
@@ -13,10 +14,10 @@ export default class Role extends Component {
 
     state = {
         showAdd: false,
-        showUpdate:false,
+        showUpdate: false,
         roles: [],            // 存放所有角色
         selectedRowKeys: [],
-        role:{},                // 存储选中的角色信息
+        role: {},                // 存储选中的角色信息
     };
 
     // 定义table组件的表头信息
@@ -35,6 +36,11 @@ export default class Role extends Component {
         {
             title: '授权时间',
             dataIndex: 'auth_time',
+            render: (auth_time) => {
+                if (auth_time) {
+                    return new Date(auth_time).toLocaleString()
+                }
+            }
         },
         {
             title: '授权人',
@@ -65,7 +71,7 @@ export default class Role extends Component {
         });
     };
 
-    showUpdateModal = () =>{
+    showUpdateModal = () => {
         this.setState({
             showUpdate: true,
         });
@@ -91,20 +97,38 @@ export default class Role extends Component {
 
     handleOkAdd = () => {
         this.form.submit()
+        // console.log(this.form)
+        // this.form.resetFields()
     };
 
     // 点击ok按钮就更新角色权限信息
-    handleOkUpdate = () => {
+    handleOkUpdate = async () => {
         // console.log('更新',this.menus.current.state.selectedKeys)
-        const result = reqUpdateRole()
-        console.log(result)
-        this.setState({ showUpdate:false })
+        const {role} = this.state
+
+        // 收集权限信息  授权人信息  授权时间
+        role.menus = this.menus.current.state.selectedKeys
+        const user = storageUtils.getUser()
+        role.auth_name = user.username
+        role.auth_time = new Date()
+        // console.log(role)
+
+        const result = await reqUpdateRole(role)
+        // console.log(result)
+        const {status, msg} = result
+        if (status === 0) {
+            message.success(msg)
+        } else {
+            message.error(msg)
+        }
+        this.setState({showUpdate: false})
+        this.getRoles()
     };
 
     handleCancel = () => {
         this.setState({
             showAdd: false,
-            showUpdate:false,
+            showUpdate: false,
         });
     };
 
@@ -116,13 +140,15 @@ export default class Role extends Component {
             role
         })
     })
+
     render() {
-        const {roles,role} = this.state
+        const {roles, role} = this.state
         // console.log(roles)
         const title = (
             <span>
                 <Button type='primary' icon={<PlusOutlined/>} onClick={this.showAddModal}> 添加角色</Button>
-                <Button type="primary" disabled={!role._id} style={{marginLeft: 10}} onClick={this.showUpdateModal}>设置角色权限</Button>
+                <Button type="primary" disabled={!role._id} style={{marginLeft: 10}}
+                        onClick={this.showUpdateModal}>设置角色权限</Button>
             </span>
         )
         return (
