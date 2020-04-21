@@ -1,12 +1,22 @@
 import React, {Component} from 'react';
 import {Button, Card, Modal, Form, Input, message, Table} from "antd";
 import {PlusOutlined} from '@ant-design/icons';
-import {reqAddRole, reqGetRoles} from "../../api";
+import {reqAddRole, reqGetRoles, reqUpdateRole} from "../../api";
+import UpdateRole from "./UpdateRole";
 
 export default class Role extends Component {
+
+    constructor(props) {
+        super(props);
+        this.menus = React.createRef()
+    }
+
     state = {
-        visible: false,
-        roles: []            // 存放所有角色
+        showAdd: false,
+        showUpdate:false,
+        roles: [],            // 存放所有角色
+        selectedRowKeys: [],
+        role:{},                // 存储选中的角色信息
     };
 
     // 定义table组件的表头信息
@@ -49,11 +59,17 @@ export default class Role extends Component {
         }
     }
 
-    showModal = () => {
+    showAddModal = () => {
         this.setState({
-            visible: true,
+            showAdd: true,
         });
     };
+
+    showUpdateModal = () =>{
+        this.setState({
+            showUpdate: true,
+        });
+    }
 
     // 点击ok按钮时获取表单数据并添加数据
     addRole = async (values) => {
@@ -64,32 +80,51 @@ export default class Role extends Component {
             const {status, msg} = result
             if (status === 0) {
                 message.success(msg)
-                this.setState({visible: false});
+                this.setState({showAdd: false});
                 this.getRoles()
             } else {
                 message.error(msg)
-                this.setState({visible: true});
+                this.setState({showAdd: true});
             }
         }
     }
 
-    handleOk = () => {
+    handleOkAdd = () => {
         this.form.submit()
     };
 
-    handleCancel = () => {
-        this.setState({visible: false,});
+    // 点击ok按钮就更新角色权限信息
+    handleOkUpdate = () => {
+        // console.log('更新',this.menus.current.state.selectedKeys)
+        const result = reqUpdateRole()
+        console.log(result)
+        this.setState({ showUpdate:false })
     };
 
+    handleCancel = () => {
+        this.setState({
+            showAdd: false,
+            showUpdate:false,
+        });
+    };
+
+    // 设置行属性
+    onRow = role => ({
+        // 点击每一行会触发，role为每一行的信息
+        onClick: () => this.setState({
+            selectedRowKeys: [role._id],
+            role
+        })
+    })
     render() {
+        const {roles,role} = this.state
+        // console.log(roles)
         const title = (
             <span>
-                <Button type='primary' icon={<PlusOutlined/>} onClick={this.showModal}> 添加角色</Button>
-                <Button type="primary" disabled={true} style={{marginLeft: 10}}>设置角色权限</Button>
+                <Button type='primary' icon={<PlusOutlined/>} onClick={this.showAddModal}> 添加角色</Button>
+                <Button type="primary" disabled={!role._id} style={{marginLeft: 10}} onClick={this.showUpdateModal}>设置角色权限</Button>
             </span>
         )
-        const {roles} = this.state
-        // console.log(roles)
         return (
             <Card title={title}>
                 <Table
@@ -99,14 +134,31 @@ export default class Role extends Component {
                     // loading={loading}      //设置数据是否在加载中
                     bordered
                     pagination={{defaultPageSize: 3}}    //配置分页器
+                    rowSelection={{
+                        type: 'radio',
+                        selectedRowKeys: this.state.selectedRowKeys,
+                        // onChange:(selectedRowKeys)=>{           // 点击单选按钮触发，数据源对应的 _id
+                        //     // console.log(selectedRowKeys)
+                        //     this.setState({selectedRowKeys})
+                        // }
+                    }}
+                    onRow={this.onRow}
                 />
                 <Modal
                     title="请添加角色"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
+                    visible={this.state.showAdd}
+                    onOk={this.handleOkAdd}
                     onCancel={this.handleCancel}
                 >
                     <AddRole setForm={(form) => this.form = form} onfinish={this.addRole}/>
+                </Modal>
+                <Modal
+                    title="请修改角色"
+                    visible={this.state.showUpdate}
+                    onOk={this.handleOkUpdate}
+                    onCancel={this.handleCancel}
+                >
+                    <UpdateRole role={role} ref={this.menus}/>
                 </Modal>
             </Card>
         );
