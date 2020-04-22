@@ -27,6 +27,10 @@ const {
     getRoles,
     updateRole
 } = require('./controller/role')
+const {
+    addUser,
+    getUsers,
+} = require('./controller/user')
 
 // 引入用户的模型
 const Users = require('./schema/userSchema')
@@ -107,6 +111,10 @@ router.post('/product/update',updateProduct)
 router.post('/role/add',addRole)
 router.get('/role/list',getRoles)
 router.post('/role/update',updateRole)
+
+// 用户的路由处理逻辑
+router.post('/user/add',addUser)
+router.get('/user/list',getUsers)
 
 
 

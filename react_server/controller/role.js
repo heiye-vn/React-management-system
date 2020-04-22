@@ -46,7 +46,7 @@ exports.getRoles = async cxt => {
 
 // 修改角色权限
 exports.updateRole = async cxt =>{
-    console.log(cxt.request.body)
+    // console.log(cxt.request.body)
     const {menus,_id} = cxt.request.body
     const result = await Roles.findById({_id})
     if(result.menus.toString() === menus.toString()){     // 如果前端传的menus权限信息和数据库中的menus信息相等，就提示权限已经存在
