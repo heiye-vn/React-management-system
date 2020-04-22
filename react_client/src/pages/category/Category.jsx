@@ -6,6 +6,7 @@ import UpdateCategory from './UpdateCategory'
 import MyButton from "../../components/my-button/MyButton";
 // import AddCategory1 from "./AddCategory";
 import {reqAddCategory, reqGetCategorys, reqUpdateCategory} from '../../api/index'
+import {PAGE_NUMBER} from "../../utils/constans";
 
 export default class Category extends Component {
     state = {
@@ -194,7 +195,7 @@ export default class Category extends Component {
                     rowKey='_id'        //必须要有的
                     loading={loading}      //设置数据是否在加载中
                     bordered
-                    pagination={{defaultPageSize: 4}}    //配置分页器
+                    pagination={{defaultPageSize: PAGE_NUMBER}}    //配置分页器
                 />
                 <Modal
                     title="请添加分类"

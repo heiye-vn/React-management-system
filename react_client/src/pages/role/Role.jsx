@@ -4,6 +4,7 @@ import {PlusOutlined} from '@ant-design/icons';
 import {reqAddRole, reqGetRoles, reqUpdateRole} from "../../api";
 import UpdateRole from "./UpdateRole";
 import storageUtils from "../../utils/storageUtils";
+import {PAGE_NUMBER} from "../../utils/constans";
 
 export default class Role extends Component {
 
@@ -18,6 +19,7 @@ export default class Role extends Component {
         roles: [],            // 存放所有角色
         selectedRowKeys: [],
         role: {},                // 存储选中的角色信息
+        loading:true,
     };
 
     // 定义table组件的表头信息
@@ -54,7 +56,9 @@ export default class Role extends Component {
     }
 
     getRoles = async () => {
+        this.setState({loading:true})
         const result = await reqGetRoles()
+        this.setState({loading:false})
         // console.log(result);
         const {status, msg, data} = result
         if (status === 0) { //如果获取分类成功
@@ -103,11 +107,11 @@ export default class Role extends Component {
 
     // 点击ok按钮就更新角色权限信息
     handleOkUpdate = async () => {
-        // console.log('更新',this.menus.current.state.selectedKeys)
+        // console.log('更新',this.menus.current.state.checkedKeys)
         const {role} = this.state
 
         // 收集权限信息  授权人信息  授权时间
-        role.menus = this.menus.current.state.selectedKeys
+        role.menus = this.menus.current.state.checkedKeys
         const user = storageUtils.getUser()
         role.auth_name = user.username
         role.auth_time = new Date()
@@ -118,10 +122,11 @@ export default class Role extends Component {
         const {status, msg} = result
         if (status === 0) {
             message.success(msg)
+            this.setState({showUpdate: false})
         } else {
             message.error(msg)
+            this.setState({showUpdate:true})
         }
-        this.setState({showUpdate: false})
         this.getRoles()
     };
 
@@ -142,7 +147,7 @@ export default class Role extends Component {
     })
 
     render() {
-        const {roles, role} = this.state
+        const {roles, role,loading} = this.state
         // console.log(roles)
         const title = (
             <span>
@@ -157,9 +162,9 @@ export default class Role extends Component {
                     dataSource={roles}  //数据源
                     columns={this.columns}       //每列的信息
                     rowKey='_id'        //必须要有的
-                    // loading={loading}      //设置数据是否在加载中
+                    loading={loading}      //设置数据是否在加载中
                     bordered
-                    pagination={{defaultPageSize: 3}}    //配置分页器
+                    pagination={{defaultPageSize: PAGE_NUMBER}}    //配置分页器
                     rowSelection={{
                         type: 'radio',
                         selectedRowKeys: this.state.selectedRowKeys,

@@ -90,7 +90,7 @@ class Header extends Component {
         return (
             <div className='header'>
                 <div className='header-top'>
-                    <span>欢迎，<span style={{fontWeight:"bold",color:"red"}}>{this.user.username}</span></span>
+                    <span>欢迎，<span style={{fontWeight:"bold",color:"blue"}}>{this.user.username}</span></span>
                     <MyButton onClick={this.loginOut}>退出</MyButton>
                 </div>
                 <div className='header-bottom'>
