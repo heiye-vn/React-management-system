@@ -30,6 +30,8 @@ const {
 const {
     addUser,
     getUsers,
+    updateUser,
+    deleteUser
 } = require('./controller/user')
 
 // 引入用户的模型
@@ -115,6 +117,8 @@ router.post('/role/update',updateRole)
 // 用户的路由处理逻辑
 router.post('/user/add',addUser)
 router.get('/user/list',getUsers)
+router.post('/user/update',updateUser)
+router.post('/user/delete',deleteUser)
 
 
 
