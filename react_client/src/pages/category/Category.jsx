@@ -31,15 +31,16 @@ export default class Category extends Component {
                 // console.log(a);//render函数的参数 是对应行的数据源
                 return (
                     <span>
-                        <MyButton onClick={() => this.showUpdate(category)}>修改分类名</MyButton>
+                        <MyButton style={{marginRight:10}} onClick={() => this.showUpdate(category)}>修改分类名</MyButton>
                         {
                             this.state.parentId === '0' ?
-                                <MyButton onClick={() => this.showSubCategory(category)}>查看子分类</MyButton> : null
+                                <MyButton style={{marginRight:10}} onClick={() => this.showSubCategory(category)}>查看子分类</MyButton> : null
                         }
-                        <MyButton>删除分类名</MyButton>
+                        <MyButton >删除分类名</MyButton>
                         </span>
                 )
-            }
+            },
+            align:'center'
         }
     ];
 

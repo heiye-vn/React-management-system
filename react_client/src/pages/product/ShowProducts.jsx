@@ -4,7 +4,7 @@ import {PlusOutlined} from '@ant-design/icons';
 import {reqProducts, reqSearchProducts} from "../../api";
 import MyButton from "../../components/my-button/MyButton";
 import {PAGE_NUMBER} from '../../utils/constans'
-
+import '../user/table.less'
 const {Option} = Select
 
 class ShowProducts extends Component {
@@ -22,15 +22,18 @@ class ShowProducts extends Component {
             {
                 title: '商品名称',
                 dataIndex: 'name',
+                align:'center'
             },
             {
                 title: '商品描述',
                 dataIndex: 'desc',
+                align:'center'
             },
             {
                 title: '商品价格',
                 dataIndex: 'price',
-                render: (price) => `￥${price}`
+                render: (price) => `￥${price}`,
+                align:'center'
             },
             {
                 title: '操作类型',
@@ -39,18 +42,19 @@ class ShowProducts extends Component {
                     // console.log(product);//render函数的参数 是对应行的数据源
                     return (
                         <span>
-                            <MyButton onClick={()=>this.props.history.push({
+                            <MyButton style={{marginRight:20}} onClick={()=>this.props.history.push({
                                 pathname:'/admin/product/detail',
                                 state:{product}
                             })}>详情</MyButton>
-                            <MyButton onClick={() => this.props.history.push({
+                            <MyButton style={{marginRight:20}} onClick={() => this.props.history.push({
                                 pathname: '/admin/product/addUpdate',
                                 state: {product}
                             })}>修改</MyButton>
                             <MyButton>删除</MyButton>
                         </span>
                     )
-                }
+                },
+                align:'center'
             }
         ];
     }
@@ -125,6 +129,7 @@ class ShowProducts extends Component {
                         rowKey='_id'        //必须要有的
                         // loading={loading}      //设置数据是否在加载中
                         bordered
+                        rowClassName={'table'}
                         pagination={{       //配置分页器
                             total,
                             defaultPageSize: PAGE_NUMBER,

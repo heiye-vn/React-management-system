@@ -81,3 +81,9 @@ export const reqAddUser = (userInfo)=>ajax('/user/add',userInfo,'post')
 
 // 暴露请求 获取所有用户信息的接口函数
 export const reqGteUsers = ()=>ajax('/user/list')
+
+// 暴露请求 修改用户信息的接口函数
+export const reqUpdateUser = (userInfo)=>ajax('/user/update',userInfo,'post')
+
+// 暴露请求 删除用户信息的接口函数
+export const reqDeteleUser = (userInfo)=>ajax('/user/delete',userInfo,'post')

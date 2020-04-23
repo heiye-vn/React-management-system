@@ -5,6 +5,8 @@ import {reqAddRole, reqGetRoles, reqUpdateRole} from "../../api";
 import UpdateRole from "./UpdateRole";
 import storageUtils from "../../utils/storageUtils";
 import {PAGE_NUMBER} from "../../utils/constans";
+import MyButton from "../../components/my-button/MyButton";
+import '../user/table.less'
 
 export default class Role extends Component {
 
@@ -27,13 +29,15 @@ export default class Role extends Component {
         {
             title: '角色名称',
             dataIndex: 'name',
+            align:'center'
         },
         {
             title: '创建时间',
             dataIndex: 'create_time',
             render: (create_time) => {
                 return new Date(create_time).toLocaleString()
-            }
+            },
+            align:'center'
         },
         {
             title: '授权时间',
@@ -42,12 +46,29 @@ export default class Role extends Component {
                 if (auth_time) {
                     return new Date(auth_time).toLocaleString()
                 }
-            }
+            },
+            align:'center'
         },
         {
             title: '授权人',
             dataIndex: 'auth_name',
+            align:'center'
         },
+        {
+            title: '操作',
+            width: 300,
+            render: (role) => {
+                // console.log(role);//render函数的参数 是对应行的数据源
+                return (
+                    <span>
+                        <MyButton style={{marginRight:20}}>修改</MyButton>
+                        <MyButton>删除</MyButton>
+                        </span>
+                )
+            },
+            align:'center'
+        }
+
 
     ];
 
@@ -164,6 +185,7 @@ export default class Role extends Component {
                     rowKey='_id'        //必须要有的
                     loading={loading}      //设置数据是否在加载中
                     bordered
+                    rowClassName={'table'}
                     pagination={{defaultPageSize: PAGE_NUMBER}}    //配置分页器
                     rowSelection={{
                         type: 'radio',
