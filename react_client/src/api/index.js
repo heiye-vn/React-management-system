@@ -73,6 +73,9 @@ export const reqAddRole = (roleInfo)=>ajax('/role/add',roleInfo,'post')
 // 暴露 请求所有角色集合的接口函数
 export const reqGetRoles = ()=>ajax('/role/list')
 
+// 暴露 请求单个角色集合的接口函数
+export const reqGetRole = (role_id)=>ajax('/role/info',{role_id})
+
 // 暴露 修改角色权限的接口函数
 export const reqUpdateRole = (roleInfo)=>ajax('/role/update',roleInfo,'post')
 

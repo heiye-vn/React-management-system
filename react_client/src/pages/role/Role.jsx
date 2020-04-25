@@ -141,9 +141,19 @@ export default class Role extends Component {
         const result = await reqUpdateRole(role)
         // console.log(result)
         const {status, msg} = result
-        if (status === 0) {
-            message.success(msg)
-            this.setState({showUpdate: false})
+        if (status === 0) {     // 如果修改权限成功
+            /*
+                修改权限时的判断：
+                    1.如果登录的用户修改了当前用户所属角色的权限，就立即退出admin组件到login组件
+            */
+            if(user.role_id===role._id){
+                message.success('当前用户的权限已被修改')
+                storageUtils.removeUser()
+                this.props.history.replace('/login')
+            }else{
+                message.success(msg)
+                this.setState({showUpdate: false})
+            }
         } else {
             message.error(msg)
             this.setState({showUpdate:true})

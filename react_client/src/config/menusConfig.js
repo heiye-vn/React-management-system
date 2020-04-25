@@ -14,6 +14,7 @@ export default [
         title:'首页',  // 菜单标题名称
         key:'/admin/home',  // 对应的path
         icon:<HomeOutlined/>,    // 图标名称
+        public:true,            // 该权限页面是开放给所有用户的
     },
     {
         title:'商品',
