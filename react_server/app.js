@@ -25,7 +25,8 @@ const {
 const {
     addRole,
     getRoles,
-    updateRole
+    updateRole,
+    getRole
 } = require('./controller/role')
 const {
     addUser,
@@ -113,6 +114,7 @@ router.post('/product/update',updateProduct)
 router.post('/role/add',addRole)
 router.get('/role/list',getRoles)
 router.post('/role/update',updateRole)
+router.get('/role/info',getRole)
 
 // 用户的路由处理逻辑
 router.post('/user/add',addUser)
