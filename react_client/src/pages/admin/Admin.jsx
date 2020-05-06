@@ -46,7 +46,9 @@ export default class Admin extends Component {
                             <Route path='/admin/charts/pie' component={Pie}/>
                         </Switch>
                     </Content>
-                    <Footer>Footer</Footer>
+                    <Footer>
+                        <span style={{display:"flex",justifyContent:"center"}}>备案号：蜀ICP备19020478  版权所有：ZSP-xxxxxxxxxx</span>
+                    </Footer>
                 </Layout>
             </Layout>
         )
