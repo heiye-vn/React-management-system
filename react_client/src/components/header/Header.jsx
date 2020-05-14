@@ -53,7 +53,7 @@ class Header extends Component {
 
     getWeather = async () => {
         const result = await reqWeather(this.state.city)
-        console.log(result);
+        // console.log(result);
         this.setState({weatherInfo: result})
     }
 
