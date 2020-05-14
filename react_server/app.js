@@ -5,6 +5,7 @@ const bodyParser = require('koa-bodyparser');
 const mongoose = require('mongoose')
 const multer = require('koa-multer')
 const path = require('path')
+const fs = require('fs')
 
 const app = new Koa();
 const router = new Router();
@@ -122,7 +123,15 @@ router.get('/user/list',getUsers)
 router.post('/user/update',updateUser)
 router.post('/user/delete',deleteUser)
 
-
+// 处理前台路由
+app.use(cxt=>{
+    // console.log('前端路由')
+    // 设置响应头
+    cxt.set('Content-Type', 'text/html; charset=UTF-8')
+    const data = fs.readFileSync(__dirname+'/public/index.html')
+    // console.log(data.toString())
+    cxt.body = data
+})
 
 
 // 连接 27017 端口下的 project 数据库（名字可以自定义）
