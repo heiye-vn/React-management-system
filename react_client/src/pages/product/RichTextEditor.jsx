@@ -10,6 +10,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 export default class RichTextEditor extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props)
         const details = this.props.details;
 
         if (details) {     // 如果有 details，则为修改页面
