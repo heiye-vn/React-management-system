@@ -123,7 +123,7 @@ router.get('/user/list',getUsers)
 router.post('/user/update',updateUser)
 router.post('/user/delete',deleteUser)
 
-// 处理前台路由
+// 前后端项目整合时处理前台路由
 app.use(cxt=>{
     // console.log('前端路由')
     // 设置响应头
